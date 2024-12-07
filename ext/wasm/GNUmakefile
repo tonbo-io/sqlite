@@ -810,13 +810,16 @@ $(post-js.js.in): $(MKDIR.bld) $(post-jses.js) $(MAKEFILE)
 		echo "/* END FILE: $$i */"; \
 	done > $@
 
+# static link the rust project.
+dir.project := ../../..
+rust_extra_init.c = $(dir.project)/target/wasm32-unknown-emscripten/release/libtonbolite.a
 
 # Undocumented Emscripten feature: if the target file extension is
 # "mjs", it defaults to ES6 module builds:
 # https://github.com/emscripten-core/emscripten/issues/14383
 sqlite3.wasm := $(dir.dout)/sqlite3.wasm
 sqlite3-wasm.c := $(dir.api)/sqlite3-wasm.c
-sqlite3-wasm.cfiles := $(sqlite3-wasm.c) $(sqlite3_wasm_extra_init.c)
+sqlite3-wasm.cfiles := $(sqlite3-wasm.c) $(sqlite3_wasm_extra_init.c) $(rust_extra_init.c)
 sqlite3-wasmfs.cfiles := $(sqlite3-wasm.cfiles)
 # sqlite3-wasm.o vs sqlite3-wasm.c: building against the latter
 # (predictably) results in a slightly faster binary. We're close
