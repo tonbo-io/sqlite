@@ -49,7 +49,8 @@ fiddle.emcc-flags = \
   -UHAVE_READLINE -UHAVE_EDITLINE -UHAVE_LINENOISE \
   -USQLITE_HAVE_ZLIB \
   -USQLITE_WASM_BARE_BONES \
-  -DSQLITE_SHELL_FIDDLE
+  -DSQLITE_SHELL_FIDDLE \
+  -DSQLITE_WASM_EXTRA_INIT
 
 # Flags specifically for debug builds of fiddle. Performance suffers
 # greatly in debug builds.
@@ -67,7 +68,7 @@ $(EXPORTED_FUNCTIONS.fiddle): $(MKDIR.bld) $(fiddle.EXPORTED_FUNCTIONS.in) \
     $(MAKEFILE.fiddle)
 	sort -u $(fiddle.EXPORTED_FUNCTIONS.in) > $@
 
-fiddle.cses := $(dir.top)/shell.c $(sqlite3-wasm.c)
+fiddle.cses := $(dir.top)/shell.c $(sqlite3-wasm.c) $(sqlite3_wasm_extra_init.c) $(rust_extra_init.a) $(rust-c-extension.cfiles)
 
 fiddle: $(fiddle-module.js) $(fiddle-module.js.debug)
 fiddle.debug: $(fiddle-module.js.debug)
